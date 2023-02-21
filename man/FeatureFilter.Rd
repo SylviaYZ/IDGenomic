@@ -25,6 +25,6 @@ This function will subset expression data based on a pre-define vector of genes 
 }
 \examples{
 
-GeoExtract(GEOAccession = "GSE48762", getGPL = TRUE,  plots = TRUE, NSub = 20)
+FeatureFilter(GEOdata = GSE48762, filterVar = "Symbol", filterValue = gene_overlap, unique = TRUE)
 
 }
