@@ -1,6 +1,7 @@
 #' Quantile normalization on a given eSet data.
 #'
-#' This function will quantile normalize expression from a eSet class object.
+#' This function will quantile normalize expression from a SummerizedExperiment object.
+#' Then produce a boxplots of NSub number of randomly selected samples.
 #'
 #' @param GEOdata either a matrix or SummerizedExperiment object contains expression.
 #' @param plots boolean to whether plot boxplots of random chosen sample or not
