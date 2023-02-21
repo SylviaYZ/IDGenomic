@@ -9,9 +9,9 @@ QuantileNorm(GEOdata, plots = TRUE, NSub = 10)
 \arguments{
 \item{GEOdata}{either a matrix or SummerizedExperiment object contains expression.}
 
-\item{plots}{boolean to whether plot boxplots of random chosen sample or not}
+\item{plots}{boolean, whether plot boxplots of random chosen sample or not}
 
-\item{NSub}{integer to number of random samples should be plotted.}
+\item{NSub}{integer, number of random samples should be plotted.}
 }
 \value{
 Either a matrix or SummerizedExperiment object contains both quantile normalized expression and metadata related to each sample.

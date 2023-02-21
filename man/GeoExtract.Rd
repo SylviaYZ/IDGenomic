@@ -2,18 +2,18 @@
 % Please edit documentation in R/GEOExtract.R
 \name{GeoExtract}
 \alias{GeoExtract}
-\title{Process microarray data from GEO.}
+\title{Extract data from GEO.}
 \usage{
 GeoExtract(GEOAccession, getGPL = TRUE, plots = TRUE, NSub = 10)
 }
 \arguments{
-\item{GEOAccession}{character containing GEO accession}
+\item{GEOAccession}{character contains GEO accession}
 
-\item{getGPL}{boolean to whether extract GPL information or not}
+\item{getGPL}{boolean, whether extract GPL information or not}
 
-\item{plots}{boolean to whether plot boxplots of random chosen sample or not}
+\item{plots}{boolean, whether plot boxplots of random chosen sample or not}
 
-\item{NSub}{integer to number of random samples should be plotted.}
+\item{NSub}{integer, number of random samples should be plotted.}
 }
 \value{
 One SummerizedExperiment object contains both expression and metadata related to each sample.

@@ -1,14 +1,14 @@
-#' Process microarray data from GEO.
+#' Extract data from GEO.
 #'
 #' This function will extract data from GEO,
 #' then list out available information given in GEO,
 #' such as featureData and phenoData.
 #' We will look into featureData and phenoData before proceeding for further processing.
 #'
-#' @param GEOAccession character containing GEO accession
-#' @param getGPL boolean to whether extract GPL information or not
-#' @param plots boolean to whether plot boxplots of random chosen sample or not
-#' @param NSub integer to number of random samples should be plotted.
+#' @param GEOAccession character contains GEO accession
+#' @param getGPL boolean, whether extract GPL information or not
+#' @param plots boolean, whether plot boxplots of random chosen sample or not
+#' @param NSub integer, number of random samples should be plotted.
 #'
 #' @return One SummerizedExperiment object contains both expression and metadata related to each sample.
 #'

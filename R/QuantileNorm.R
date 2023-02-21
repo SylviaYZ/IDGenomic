@@ -4,8 +4,8 @@
 #' Then produce a boxplots of NSub number of randomly selected samples.
 #'
 #' @param GEOdata either a matrix or SummerizedExperiment object contains expression.
-#' @param plots boolean to whether plot boxplots of random chosen sample or not
-#' @param NSub integer to number of random samples should be plotted.
+#' @param plots boolean, whether plot boxplots of random chosen sample or not
+#' @param NSub integer, number of random samples should be plotted.
 #'
 #' @return Either a matrix or SummerizedExperiment object contains both quantile normalized expression and metadata related to each sample.
 #'
