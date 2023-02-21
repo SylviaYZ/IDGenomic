@@ -17,7 +17,8 @@ QuantileNorm(GEOdata, plots = TRUE, NSub = 10)
 Either a matrix or SummerizedExperiment object contains both quantile normalized expression and metadata related to each sample.
 }
 \description{
-This function will quantile normalize expression from a eSet class object.
+This function will quantile normalize expression from a SummerizedExperiment object.
+Then produce a boxplots of NSub number of randomly selected samples.
 }
 \examples{
 
