@@ -14,6 +14,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+This is a package to process data loaded directly from [Gene Expression Omnibus](https://www.ncbi.nlm.nih.gov/geo/), then ... 
+
 ```{r setup}
 library(IDGenomic)
 ```
@@ -44,7 +46,7 @@ If `plots = TRUE`, then a boxplot will be drawn for `NSub` number of randomly se
 
 One [SummerizedExperiment](https://bioconductor.org/packages/release/bioc/vignettes/SummarizedExperiment/inst/doc/SummarizedExperiment.html) class object contains both expression and metadata related to each sample and feature.
 
-```{r, fig.height=5,fig.width=7}
+```{r, fig.width=7, fig.height=5}
 GSE48762 <- GeoExtract(GEOAccession = "GSE48762",
                       getGPL = TRUE,  
                       plots = TRUE, 
@@ -77,11 +79,11 @@ table(GSE48762$`vaccine:ch1`)
 
 # Quantile Normalization
 
-From the boxplot, we need to perform quantile normalization.
+From the boxplot and description given in this data, we will perform quantile normalization. Function for quantile normalization is called from `limma()`.
 
 #### Input for QuantileNorm()
 
-- `GEOdata` either a matrix or SummerizedExperiment object contains expression.
+- `GEOdata` either a matrix or SummerizedExperiment object contains expression. If a matrix is provided, rows are features and columns are samples (this structure remains for the entire pacakge).
 
 - `plots` option will output a boxplot of 10 (default) randomly selected samples. (default is TRUE)
 
@@ -95,19 +97,59 @@ If `plots = TRUE`, then a boxplot will be drawn for `NSub` number of randomly se
 
 Either SummerizedExperiment object contains both quantile normalized expression and metadata related to each sample, or a matrix of expression only.
 
-```{r, fig.height=5,fig.width=7}
+Quantile normalized data is stored in `assays(GEOdata)$quantileNorm` for SummerizedExperiment object, and original expression data is kept.
+
+```{r, fig.width=7, fig.height=5}
 class(GSE48762)
 
-GSE48762.quantNorm <- QuantileNorm(GEOdata = GSE48762, plots = TRUE, NSub = 10)
+GSE48762 <- QuantileNorm(GEOdata = GSE48762, plots = TRUE, NSub = 10)
 ```
 
-# Subset to a pre-defined list of genes
+# Subset features
+
+Given a pre-defined list of probes/genes, this function subset to this list of probes/genes and give the option to pick unique probes/genes. Data does not need to be quantile normalized.
+
+#### Input for FeatureFilter()
+
+- `GEOdata` either a matrix or SummerizedExperiment object contains expression. If a matrix is provided, `rownames(GEOdata)` must be the `filterValue`.
+
+- `filterVar` a character for the variable that is being subsetted related to the feature of expression data (default = NA). If a matrix is provided, user does not need to provide `filterVar`.
+
+- `filterValue`  a vector of genes/probes identities one wish to keep
+
+- `unique` a boolean, whether to keep only unique genes/probes after filter (default = FALSE). If `unique=TRUE`, probes/genes with the highest median expression is kept.
+
+#### Return from FeatureFilter()
+
+A matrix or SummerizedExperiment object.
 
 ```{r}
+dim(GSE48762)
 
+gene_overlap <- openxlsx::read.xlsx("/Users/yu.zhang/Desktop/Modular/Data/total_overlap_8.24.xlsx", sheet = 1)$with_U133A
+gene_overlap <- gene_overlap[!is.na(gene_overlap)]
+length(gene_overlap)
+
+GSE48762.sub <- FeatureFilter(GEOdata = GSE48762, 
+                              filterVar = "Symbol",
+                              filterValue = gene_overlap,
+                              unique = FALSE)
+dim(GSE48762.sub)
+
+GSE48762.unique <- FeatureFilter(GEOdata = GSE48762, 
+                              filterVar = "Symbol",
+                              filterValue = gene_overlap,
+                              unique = TRUE)
+dim(GSE48762.unique)
+
+# If all unique genes, should return FALSE.
+all(duplicated(rowData(GSE48762.unique)$Symbol))
 ```
 
 
+## When gene symbols cannot be retrived directly from GEO
+
+Annotation of probes to gene symbol will be done through BioMart packge. Function/code/demonstration will be added.
 
 
 
