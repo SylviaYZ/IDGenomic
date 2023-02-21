@@ -17,3 +17,98 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(IDGenomic)
 ```
+
+# Extracting data from GEO
+
+Currently, this package supports parsing GSE matrix from GEO. 
+
+GSE48762 is a vaccine data, part of the GSE30101 series. Participants received either a Flu vaccine, pnuemococcoal vaccine or saline. 
+
+#### Input for GeoExtract()
+
+- `GEOAccession` must be provided as a character.
+
+- `getGPL` options comes from package [GEOquery::getGEO](https://www.rdocumentation.org/packages/GEOquery/versions/2.38.4/topics/getGEO). (default is TRUE)
+
+- `plots` option will output a boxplot of 10 (default) randomly selected samples. (default is TRUE)
+
+- `NSub` option specify number of samples to be randomly selected for boxplot. (default is 10)
+
+#### Output from GeoExtract()
+
+Information related to the GEO dataset will be printed. Especially inforamtion included in featureData and phenoData are listed.
+
+If `plots = TRUE`, then a boxplot will be drawn for `NSub` number of randomly selected samples.
+
+#### Return from GeoExtract()
+
+One [SummerizedExperiment](https://bioconductor.org/packages/release/bioc/vignettes/SummarizedExperiment/inst/doc/SummarizedExperiment.html) class object contains both expression and metadata related to each sample and feature.
+
+```{r, fig.height=5,fig.width=7}
+GSE48762 <- GeoExtract(GEOAccession = "GSE48762",
+                      getGPL = TRUE,  
+                      plots = TRUE, 
+                      NSub = 10)
+
+```
+
+# Examine GEO data
+
+Upon examining the result from `GeoExtract()`, gene symbol is provided when we apply `getGPL = TRUE` option. We will examine `c("Symbol", "Entrez_Gene_ID")` from featureData.
+
+```{r}
+head(rowData(GSE48762)$Symbol)
+head(rowData(GSE48762)$Entrez_Gene_ID)
+```
+
+Further, we are interested in certain characteristics regarding each sample. We will look into `c("blood source:ch1", "day:ch1", "ethnicity:ch1", "gender:ch1", "vaccine:ch1")`.
+
+```{r}
+table(GSE48762$`blood source:ch1`)
+
+table(GSE48762$`day:ch1`)
+
+table(GSE48762$`ethnicity:ch1`)
+
+table(GSE48762$`gender:ch1`)
+
+table(GSE48762$`vaccine:ch1`)
+```
+
+# Quantile Normalization
+
+From the boxplot, we need to perform quantile normalization.
+
+#### Input for QuantileNorm()
+
+- `GEOdata` either a matrix or SummerizedExperiment object contains expression.
+
+- `plots` option will output a boxplot of 10 (default) randomly selected samples. (default is TRUE)
+
+- `NSub` option specify number of samples to be randomly selected for boxplot. (default is 10)
+
+### Output from QuantileNorm()
+
+If `plots = TRUE`, then a boxplot will be drawn for `NSub` number of randomly selected samples after quantile normalization.
+
+### Return from QuantileNorm()
+
+Either SummerizedExperiment object contains both quantile normalized expression and metadata related to each sample, or a matrix of expression only.
+
+```{r, fig.height=5,fig.width=7}
+class(GSE48762)
+
+GSE48762.quantNorm <- QuantileNorm(GEOdata = GSE48762, plots = TRUE, NSub = 10)
+```
+
+# Subset to a pre-defined list of genes
+
+```{r}
+
+```
+
+
+
+
+
+
