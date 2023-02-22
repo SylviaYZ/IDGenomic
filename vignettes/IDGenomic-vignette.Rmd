@@ -20,34 +20,41 @@ This is a package to process data loaded directly from [Gene Expression Omnibus]
 library(IDGenomic)
 ```
 
+```{r, message = FALSE}
+library(SummarizedExperiment)
+```
+
 # Extracting data from GEO
 
 Currently, this package supports parsing GSE matrix from GEO. 
 
-GSE48762 is a vaccine data, part of the GSE30101 series. Participants received either a Flu vaccine, pnuemococcoal vaccine or saline. 
+GSE48762 is a dataset related to vaccination and is part of the GSE30101 series. The study involved participants who received either a flu vaccine, pneumococcal vaccine, or a saline solution. This dataset provides valuable information for researchers interested in the immune response to different vaccines and can contribute to the development of more effective vaccination strategies. Metadata and demographic information are deposited in GEO.
 
-#### Input for GeoExtract()
+#### Input for GEOExtract()
 
 - `GEOAccession` must be provided as a character.
 
-- `getGPL` options comes from package [GEOquery::getGEO](https://www.rdocumentation.org/packages/GEOquery/versions/2.38.4/topics/getGEO). (default is TRUE)
+- `GSEMatrix` is a boolean indicating whether to extract the GSE matrix from GEO, with a default value of TRUE.
 
-- `plots` option will output a boxplot of 10 (default) randomly selected samples. (default is TRUE)
+- `getGPL` is an option that comes from the package [GEOquery::getGEO](https://www.rdocumentation.org/packages/GEOquery/versions/2.38.4/topics/getGEO), with a default value of TRUE.
 
-- `NSub` option specify number of samples to be randomly selected for boxplot. (default is 10)
+- `plots` is an option that will output a boxplot of 10 randomly selected samples, with a default value of TRUE.
 
-#### Output from GeoExtract()
+- `NSub` is an option that specifies the number of samples to be randomly selected for the boxplot, with a default value of 10.
 
-Information related to the GEO dataset will be printed. Especially inforamtion included in featureData and phenoData are listed.
+#### Output from GEOExtract()
 
-If `plots = TRUE`, then a boxplot will be drawn for `NSub` number of randomly selected samples.
+The function will print information related to the GEO dataset, specifically information included in featureData and phenoData.
 
-#### Return from GeoExtract()
+If `plots = TRUE`, a boxplot will be generated for `NSub` randomly selected samples.
+
+#### Return from GEOExtract()
 
 One [SummerizedExperiment](https://bioconductor.org/packages/release/bioc/vignettes/SummarizedExperiment/inst/doc/SummarizedExperiment.html) class object contains both expression and metadata related to each sample and feature.
 
 ```{r, fig.width=7, fig.height=5}
-GSE48762 <- GeoExtract(GEOAccession = "GSE48762",
+GSE48762 <- GEOExtract(GEOAccession = "GSE48762",
+                       GSEMatrix =TRUE, 
                       getGPL = TRUE,  
                       plots = TRUE, 
                       NSub = 10)
@@ -58,12 +65,15 @@ GSE48762 <- GeoExtract(GEOAccession = "GSE48762",
 
 Upon examining the result from `GeoExtract()`, gene symbol is provided when we apply `getGPL = TRUE` option. We will examine `c("Symbol", "Entrez_Gene_ID")` from featureData.
 
+Upon examining the results from `GeoExtract()`, gene symbols are provided when we apply the `getGPL = TRUE` option. We can examine `c("Symbol", "Entrez_Gene_ID")` in featureData to view the gene symbols and Entrez gene IDs associated with the features in the dataset.
+
+
 ```{r}
 head(rowData(GSE48762)$Symbol)
 head(rowData(GSE48762)$Entrez_Gene_ID)
 ```
 
-Further, we are interested in certain characteristics regarding each sample. We will look into `c("blood source:ch1", "day:ch1", "ethnicity:ch1", "gender:ch1", "vaccine:ch1")`.
+Further, we are interested in specific characteristics related to each sample. We will investigate the following metadata fields: `c("blood source:ch1", "day:ch1", "ethnicity:ch1", "gender:ch1", "vaccine:ch1")`.
 
 ```{r}
 table(GSE48762$`blood source:ch1`)
@@ -79,25 +89,23 @@ table(GSE48762$`vaccine:ch1`)
 
 # Quantile Normalization
 
-From the boxplot and description given in this data, we will perform quantile normalization. Function for quantile normalization is called from `limma()`.
+Based on the boxplot and information provided in the dataset, we will perform quantile normalization. Function in `IDGenomic` for quantile normalization is called from package `limma`.
 
 #### Input for QuantileNorm()
 
-- `GEOdata` either a matrix or SummerizedExperiment object contains expression. If a matrix is provided, rows are features and columns are samples (this structure remains for the entire pacakge).
+- `GEOdata` is a matrix or SummerizedExperiment object. If a SummarizedExperiment object is provided, it already contains the expression data and its corresponding metadata. If a matrix is provided, rows are features and columns are samples (this structure is maintained throughout the entire package). 
 
-- `plots` option will output a boxplot of 10 (default) randomly selected samples. (default is TRUE)
+- `plots` option generates a boxplot of 10 (default) randomly selected samples, this option is set to TRUE by default. 
 
-- `NSub` option specify number of samples to be randomly selected for boxplot. (default is 10)
+- `NSub` option allows you to specify the number of samples to be randomly selected for the boxplot when the `plots` option is set to TRUE. `NSub = 10` is set by default.
 
 ### Output from QuantileNorm()
 
-If `plots = TRUE`, then a boxplot will be drawn for `NSub` number of randomly selected samples after quantile normalization.
+If `plots = TRUE`, a boxplot will be generated for `NSub` randomly selected samples.
 
 ### Return from QuantileNorm()
 
-Either SummerizedExperiment object contains both quantile normalized expression and metadata related to each sample, or a matrix of expression only.
-
-Quantile normalized data is stored in `assays(GEOdata)$quantileNorm` for SummerizedExperiment object, and original expression data is kept.
+A SummerizedExperiment object contains both quantile-normalized expression and metadata related to each sample, or a matrix of quantile-normalized expression only. For a SummerizedExperiment object, quantile-normalized data is stored in `assays(GEOdata)$quantileNorm`, while the original expression data is preserved.
 
 ```{r, fig.width=7, fig.height=5}
 class(GSE48762)
@@ -107,21 +115,21 @@ GSE48762 <- QuantileNorm(GEOdata = GSE48762, plots = TRUE, NSub = 10)
 
 # Subset features
 
-Given a pre-defined list of probes/genes, this function subset to this list of probes/genes and give the option to pick unique probes/genes. Data does not need to be quantile normalized.
+This function allows for the subsetting of a pre-defined list of probes/genes, with the option to select unique probes/genes. It is not necessary for the data to be quantile normalized.
 
 #### Input for FeatureFilter()
 
-- `GEOdata` either a matrix or SummerizedExperiment object contains expression. If a matrix is provided, `rownames(GEOdata)` must be the `filterValue`.
+- `GEOdata` is either a matrix or SummerizedExperiment object. If a SummerizedExperiment object is provided, GEOdata contains both expression and metadata related to each sample and feature. If a matrix is provided, GEOdata contains expression data, and the `rownames(GEOdata)` must correspond to the `filterValue`.
 
-- `filterVar` a character for the variable that is being subsetted related to the feature of expression data (default = NA). If a matrix is provided, user does not need to provide `filterVar`.
+- `filterVar` should be a character indicating the variable that is being subsetted related to the feature of expression data for SummerizedExperiment object. The default value for filterVar is NA. Note that if a matrix is provided as GEOdata, there is no need to provide `filterVar`.
 
-- `filterValue`  a vector of genes/probes identities one wish to keep
+- `filterValue` is a vector of gene/probe identities that one wishes to keep in the dataset after subsetting. If a SummerizedExperiment object is provided, `filterValue` is a subset of values in `filterVar`. If a matrix is provided as GEOdata, `filterValue` is a subset of `rownames(GEOdata)`.
 
-- `unique` a boolean, whether to keep only unique genes/probes after filter (default = FALSE). If `unique=TRUE`, probes/genes with the highest median expression is kept.
+- `unique` parameter is a boolean that determines whether to keep only unique genes/probes after filtering. Its default value is FALSE. If `unique=TRUE`, only unique genes/probes are retained by selecting the gene/probe with the highest median expression level.
 
 #### Return from FeatureFilter()
 
-A matrix or SummerizedExperiment object.
+A SummerizedExperiment object or matrix.
 
 ```{r}
 dim(GSE48762)
