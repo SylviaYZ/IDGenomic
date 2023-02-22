@@ -7,14 +7,17 @@
 QuantileNorm(GEOdata, plots = TRUE, NSub = 10)
 }
 \arguments{
-\item{GEOdata}{either a matrix or SummerizedExperiment object contains expression.}
+\item{GEOdata}{is either a matrix or SummerizedExperiment object.
+If a SummarizedExperiment object is provided, it already contains the expression data and its corresponding metadata.
+If a matrix is provided, rows are features and columns are samples (this structure is maintained throughout the entire package).}
 
-\item{plots}{boolean, whether plot boxplots of random chosen sample or not}
+\item{plots}{boolean, an option thats generates a boxplot of 10 (default) randomly selected samples, this option is set to TRUE by default.}
 
-\item{NSub}{integer, number of random samples should be plotted.}
+\item{NSub}{integer, an option that specifies the number of samples to be randomly selected for the boxplot, with a default value of 10.}
 }
 \value{
-Either a matrix or SummerizedExperiment object contains both quantile normalized expression and metadata related to each sample.
+A SummerizedExperiment object contains both quantile-normalized expression and metadata related to each sample, or a matrix of quantile-normalized expression only.
+For a SummerizedExperiment object, quantile-normalized data is stored in \code{assays(GEOdata)$quantileNorm}, while the original expression data is preserved.
 }
 \description{
 This function will quantile normalize expression from a SummerizedExperiment object.

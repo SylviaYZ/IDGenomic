@@ -7,18 +7,16 @@
 FeatureFilter(GEOdata, filterVar = NA, filterValue, unique = FALSE)
 }
 \arguments{
-\item{GEOdata}{either a matrix or SummerizedExperiment object contains expression.}
+\item{GEOdata}{is either a matrix or SummerizedExperiment object. If a SummerizedExperiment object is provided, GEOdata contains both expression and metadata related to each sample and feature. If a matrix is provided, GEOdata contains expression data, and the \code{rownames(GEOdata)} must correspond to the \code{filterValue}.}
 
-\item{filterVar}{a character for the variable that is being subsetted}
+\item{filterVar}{should be a character indicating the variable that is being subsetted related to the feature of expression data for SummerizedExperiment object. The default value for filterVar is NA. Note that if a matrix is provided as GEOdata, there is no need to provide \code{filterVar}.}
 
-\item{filterValue}{a vector of genes/probes identities one wish to keep}
+\item{filterValue}{is a vector of gene/probe identities that one wishes to keep in the dataset after subsetting. If a SummerizedExperiment object is provided, \code{filterValue} is a subset of values in \code{filterVar}. If a matrix is provided as GEOdata, \code{filterValue} is a subset of \code{rownames(GEOdata)}.}
 
-\item{unique}{a boolean, after filter, whether to keep only those}
+\item{unique}{is a boolean that determines whether to keep only unique genes/probes after filtering. Its default value is FALSE. If \code{unique=TRUE}, only unique genes/probes are retained by selecting the gene/probe with the highest median expression level.}
 }
 \value{
-A SummerizedExperiment object contains both expression and metadata related to each sample.
-
-Or a matrix of expression data.
+A SummerizedExperiment object or matrix.
 }
 \description{
 This function will subset expression data based on a pre-define vector of genes or probes.
