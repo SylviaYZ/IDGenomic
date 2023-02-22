@@ -1,16 +1,14 @@
 #' Extract data from GEO.
 #'
-#' This function will extract data from GEO,
-#' then list out available information given in GEO,
-#' such as featureData and phenoData.
-#' We will look into featureData and phenoData before proceeding for further processing.
+#' This function will extract data from GEO, then list out available information given in GEO, such as featureData and phenoData.
 #'
 #' @param GEOAccession character contains GEO accession
-#' @param getGPL boolean, whether extract GPL information or not
-#' @param plots boolean, whether plot boxplots of random chosen sample or not
-#' @param NSub integer, number of random samples should be plotted.
+#' @param GSEMatrix boolean, indicating whether to extract the GSE matrix from GEO, with a default value of TRUE.
+#' @param getGPL boolean, indicating whether to  extract GPL information or not from GEO, with a default value of TRUE.
+#' @param plots boolean, an option that will output a boxplot of NSub number of randomly selected samples, with a default value of TRUE.
+#' @param NSub integer, an option that specifies the number of samples to be randomly selected for the boxplot, with a default value of 10.
 #'
-#' @return One SummerizedExperiment object contains both expression and metadata related to each sample.
+#' @return One SummerizedExperiment class object contains both expression and metadata related to each sample and feature.
 #'
 #' @import GEOquery
 #' @import Biobase
@@ -18,10 +16,11 @@
 #'
 #' @examples
 #'
-#' GeoExtract(GEOAccession = "GSE48762", getGPL = TRUE,  plots = TRUE, NSub = 20)
+#' GEOExtract(GEOAccession = "GSE48762", GSEMatrix =TRUE, getGPL = TRUE,  plots = TRUE, NSub = 20)
 #'
 #' @export
-GeoExtract <- function(GEOAccession,
+GEOExtract <- function(GEOAccession,
+                       GSEMatrix =TRUE,
                        getGPL = TRUE,
                        plots = TRUE,
                        NSub = 10){
