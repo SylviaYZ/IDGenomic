@@ -36,12 +36,12 @@ FeatureFilter <- function(GEOdata,
     if (unique){
       genes.dup <-  unique(rowData(GEOdata)[,filterVar][duplicated(rowData(GEOdata)[,filterVar])])
 
-      if ("quantileNorm" %in% names(assays(GEOdata))){ data.use = "quantileNorm" }
-      else{data.use = "exprs"}
+      if ("quantileNorm" %in% names(assays(GEOdata))){ slot.use = "quantileNorm" }
+      else{slot.use = "exprs"}
 
       for(g in genes.dup){
         index <- which(rowData(GEOdata)[,filterVar] == g)
-        dup.rm <- index[ -which.max(Biobase::rowMedians(assays(GEOdata)[[data.use]][index,])) ]
+        dup.rm <- index[ -which.max(Biobase::rowMedians(assays(GEOdata)[[slot.use]][index,])) ]
         GEOdata <- GEOdata[-dup.rm,]
         }
 
