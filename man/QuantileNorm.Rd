@@ -25,6 +25,6 @@ Then produce a boxplots of NSub number of randomly selected samples.
 }
 \examples{
 
-QuantileNorm(GEOData = GSE48762, plots = TRUE, NSub = 10)
+QuantileNorm(GEOdata = GSE48762, plots = TRUE, NSub = 10)
 
 }

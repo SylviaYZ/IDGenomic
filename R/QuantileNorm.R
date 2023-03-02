@@ -17,7 +17,7 @@
 #'
 #' @examples
 #'
-#' QuantileNorm(GEOData = GSE48762, plots = TRUE, NSub = 10)
+#' QuantileNorm(GEOdata = GSE48762, plots = TRUE, NSub = 10)
 #'
 #' @export
 QuantileNorm <- function(GEOdata,
