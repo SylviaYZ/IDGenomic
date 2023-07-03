@@ -11,7 +11,8 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Depends: 
-Imports: matrixStats, GEOquery, Biobase, limma, SummarizedExperiment, corrplot
+Imports: matrixStats, GEOquery, Biobase, limma, SummarizedExperiment, corrplot, Rcpp (>= 0.11.0), RcppArmadillo
+LinkingTo: Rcpp, RcppArmadillo
 Suggests: 
     knitr,
     rmarkdown

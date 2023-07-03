@@ -8,22 +8,25 @@ CorrPlot(
   GEOdata,
   slot.use = "exprs",
   corr.method = "spearman",
-  plot.method = "histogram"
+  plot.method = "histogram",
+  corr.cutoff = 0.5
 )
 }
 \arguments{
-\item{GEOdata}{is either a matrix or SummerizedExperiment object.
+\item{GEOdata}{either a matrix or SummerizedExperiment object.
 If a SummarizedExperiment object is provided, it already contains the expression data and its corresponding metadata.
 If a matrix is provided, rows are features and columns are samples (this structure is maintained throughout the entire package).}
 
-\item{slot.use}{asasys data in GEOdata to calculate pair-wise correlation, default is "exprs"}
+\item{slot.use}{specify asasy data in GEOdata to calculate pair-wise correlation, default is "exprs"}
 
 \item{corr.method}{method to calculate correlation c("pearson","spearman"), default is "spearman"}
 
 \item{plot.method}{type of plot for output, c("heatmap", "histogram"). Heatmap is only recommended when sample size is less than 30.}
+
+\item{corr.cutoff}{cutoff for exporting sample ids with correlation less than this cutoff}
 }
 \value{
-A plot of correlation.
+Plot(s) of correlation.
 Heatmap is drawn using \href{https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html}{corrplot} package.
 }
 \description{
@@ -31,6 +34,6 @@ This plot will generate correlation between samples, or correlation between gene
 }
 \examples{
 
-CorrPlot(GEOdata = GSE48762[,300:320], slot.use = "exprs", corr.method = "spearman", plot.method = c("heatmap", "hist"))
+CorrPlot(GEOdata = GSE48762[,301:330], slot.use = "exprs", corr.method = "spearman", plot.method = c("heatmap", "hist"))
 
 }

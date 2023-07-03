@@ -20,7 +20,7 @@ This is a package to process data loaded directly from [Gene Expression Omnibus]
 library(IDGenomic)
 ```
 
-```{r, message = FALSE}
+```{r, message = FALSE, eval = FALSE}
 library(SummarizedExperiment)
 ```
 
@@ -52,7 +52,7 @@ If `plots = TRUE`, a boxplot will be generated for `NSub` randomly selected samp
 
 One [SummerizedExperiment](https://bioconductor.org/packages/release/bioc/vignettes/SummarizedExperiment/inst/doc/SummarizedExperiment.html) class object contains both expression and metadata related to each sample and feature.
 
-```{r, fig.width=7, fig.height=5}
+```{r, fig.width=7, fig.height=5, eval = FALSE}
 GSE48762 <- GEOExtract(GEOAccession = "GSE48762",
                        GSEMatrix =TRUE, 
                       getGPL = TRUE,  
@@ -68,14 +68,14 @@ Upon examining the result from `GeoExtract()`, gene symbol is provided when we a
 Upon examining the results from `GeoExtract()`, gene symbols are provided when we apply the `getGPL = TRUE` option. We can examine `c("Symbol", "Entrez_Gene_ID")` in featureData to view the gene symbols and Entrez gene IDs associated with the features in the dataset.
 
 
-```{r}
+```{r, eval = FALSE}
 head(rowData(GSE48762)$Symbol)
 head(rowData(GSE48762)$Entrez_Gene_ID)
 ```
 
 Further, we are interested in specific characteristics related to each sample. We will investigate the following metadata fields: `c("blood source:ch1", "day:ch1", "ethnicity:ch1", "gender:ch1", "vaccine:ch1")`.
 
-```{r}
+```{r, eval = FALSE}
 table(GSE48762$`blood source:ch1`)
 
 table(GSE48762$`day:ch1`)
@@ -107,7 +107,7 @@ If `plots = TRUE`, a boxplot will be generated for `NSub` randomly selected samp
 
 A SummerizedExperiment object contains both quantile-normalized expression and metadata related to each sample, or a matrix of quantile-normalized expression only. For a SummerizedExperiment object, quantile-normalized data is stored in `assays(GEOdata)$quantileNorm`, while the original expression data is preserved.
 
-```{r, fig.width=7, fig.height=5}
+```{r, fig.width=7, fig.height=5, eval = FALSE}
 class(GSE48762)
 
 GSE48762 <- QuantileNorm(GEOdata = GSE48762, plots = TRUE, NSub = 10)
@@ -131,7 +131,7 @@ This function allows for the subsetting of a pre-defined list of probes/genes, w
 
 A SummerizedExperiment object or matrix.
 
-```{r}
+```{r, eval = FALSE}
 dim(GSE48762)
 
 gene_overlap <- openxlsx::read.xlsx("/Users/yu.zhang/Desktop/Modular/Data/total_overlap_8.24.xlsx", sheet = 1)$with_U133A
